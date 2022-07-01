@@ -5,8 +5,8 @@ let moment = require('moment')
 exports.contents = async function(req, res, next) {
 
     // CHECK MIGRATION DATA
-    let lastMigrated = await rpoMigrations.getLastMigrate('whoIsRecord1')
-    let page = 1, limit = 2, offset = 0;
+    let lastMigrated = await rpoMigrations.getLastMigrate('whoIsRecord')
+    let page = 1, limit = 200, offset = 0;
 
     if (lastMigrated.length > 0) {
         page = lastMigrated[0].page + 1
@@ -14,7 +14,7 @@ exports.contents = async function(req, res, next) {
     }
 
     let migrationData = {
-        obj : 'whoIsRecord1',
+        obj : 'whoIsRecord',
         page: page,
         limit: limit,
         created_at : moment().format()
