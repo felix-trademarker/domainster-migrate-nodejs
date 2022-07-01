@@ -3,7 +3,7 @@ let _table = tableName;
 var Model = require('./_model')
 var defaultModel = new Model(_table)
 
-let conn = require('../../config/DbConnect');
+let conn = require('./../config/DbConnect');
 
 module.exports = {
 
