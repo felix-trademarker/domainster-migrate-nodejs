@@ -35,9 +35,10 @@ exports.contents = async function(req, res, next) {
                 rpo.put(record)
             }
         }
+
+        await rpoMigrations.put(migrationData)
+    } else {
+        console.log("========== STOP DOMAIN MIGRATION, NO DATA FOUND ==========")
     }
 
-    await rpoMigrations.put(migrationData)
-
-    
 }
