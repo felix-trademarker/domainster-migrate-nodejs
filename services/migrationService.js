@@ -4,7 +4,7 @@ let moment = require('moment')
 
 exports.contents = async function(req, res, next) {
 
-    let page = 1, limit = 200, offset = 0;
+    let page = 1, limit = 100, offset = 0;
 
     // CHECK MIGRATION DATA
     let lastMigrated = await rpoMigrations.getLastMigrate('whoIsRecord')
@@ -23,7 +23,7 @@ exports.contents = async function(req, res, next) {
     }
 
     
-
+    await rpoMigrations.put(migrationData)
     
     let records = await rpo.getWhoIsRecord(page,limit)
 
@@ -39,9 +39,11 @@ exports.contents = async function(req, res, next) {
             }
         }
 
-        await rpoMigrations.put(migrationData)
+        
     } else {
         console.log("========== STOP DOMAIN MIGRATION, NO DATA FOUND ==========")
     }
+
+    
 
 }
