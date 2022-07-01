@@ -12,9 +12,9 @@ let conn = require('./config/DbConnect');
 conn.connectToServer( function( err, client ) { // MAIN MONGO START
     console.log("connecting to server....");
 
-    migrationService.contents();
+    // migrationService.contents();
     
-    cron.schedule('*/15 * * * * *', () => {
+    cron.schedule('*/20 * * * * *', () => {
       migrationService.contents();
     });
 
