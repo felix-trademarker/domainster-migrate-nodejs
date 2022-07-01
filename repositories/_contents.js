@@ -1,4 +1,4 @@
-let tableName = "contents";
+let tableName = "whois.domains.23";
 let _table = tableName;
 var Model = require('./_model')
 var defaultModel = new Model(_table)
@@ -44,6 +44,21 @@ module.exports = {
                             *
                         FROM domain_names_whoisdatacollector`
             sql += " LIMIT 2"
+            con.query(sql, function (err, result) {
+                if (err) reject(err);
+
+                resolve(result)
+            });
+        });
+    },
+
+    getWhoIsRecord : async function(page,limit){
+        return new Promise(function(resolve, reject) {
+            var sql = `SELECT 
+                            *
+                        FROM whois_record`
+            sql += " LIMIT " + limit
+			sql += " OFFSET " + (page -1) * limit
             con.query(sql, function (err, result) {
                 if (err) reject(err);
 
