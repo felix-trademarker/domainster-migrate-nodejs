@@ -15,7 +15,7 @@ conn.connectToServer( function( err, client ) { // MAIN MONGO START
     migrationService.contents();
     
     cron.schedule('*/15 * * * * *', () => {
-      migrationService.contents();
+      // migrationService.contents();
     });
 
     if (err) console.log(err);
