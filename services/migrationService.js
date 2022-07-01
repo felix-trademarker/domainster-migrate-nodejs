@@ -13,21 +13,27 @@ exports.contents = async function(req, res, next) {
     if (lastMigrated.length > 0) {
         page = lastMigrated[0].page + 1
         limit = lastMigrated[0].limit
+
+        if (lastMigrated.flag) {
+            console.log(" *********** STOP ********** ");
+            return;
+        }
     }
 
     let migrationData = {
         obj : 'whoIsRecord',
         page: page,
         limit: limit,
+        flag: false,
         created_at : moment().format()
     }
 
-    
-    await rpoMigrations.put(migrationData)
-    
     let records = await rpo.getWhoIsRecord(page,limit)
-
+    
     if (records && records.length) {
+        
+        await rpoMigrations.put(migrationData)
+
         console.log("****** start migrate page %d ********",page);
         for (let r=0; r < records.length; r++) {
             let record = records[r];
@@ -41,6 +47,8 @@ exports.contents = async function(req, res, next) {
 
         
     } else {
+        migrationData.flag = true
+        await rpoMigrations.put(migrationData)
         console.log("========== STOP DOMAIN MIGRATION, NO DATA FOUND ==========")
     }
 
