@@ -1,0 +1,12 @@
+PORT=4200
+
+MongoURILOCAL=mongodb://localhost:27017/domainster
+MongoDb=domainster
+
+TBLEXT=whois.
+ENVIRONMENT=dev
+
+DBNAME=whoiscrawler_v23_com
+DBUSER=root
+DBPASS=bigfoot8484
+DBHOST=localhost:3306
