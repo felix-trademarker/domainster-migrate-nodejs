@@ -1,4 +1,5 @@
 let rpo = require('../repositories/_contents')
+let rpoIStudio10 = require('../repositories/_istudio10')
 let rpoMigrations = require('../repositories/_migrations')
 let moment = require('moment')
 
@@ -52,6 +53,49 @@ exports.contents = async function(req, res, next) {
         console.log("========== STOP DOMAIN MIGRATION, NO DATA FOUND ==========")
     }
 
+    
+
+}
+
+exports.istudio10 = async function() {
+
+    let iStudio10 = await rpoIStudio10.getSQLTables()
+    var Model = require('./../repositories/_model')
+
+
+    for (let i=0; i < iStudio10.length; i++) {
+
+        let lastMigrated = await rpoMigrations.getLastMigrate(iStudio10[i].table_name)
+
+        // console.log(lastMigrated)
+        if (!lastMigrated || lastMigrated.length <= 0) {
+
+            let migrationData = {
+                obj : iStudio10[i].table_name,
+                page: 1,
+                limit: -1,
+                flag: true,
+                created_at : moment().format()
+            }
+
+            await rpoMigrations.put(migrationData)
+
+            console.log("this", iStudio10[i].table_name)
+            let defaultModel = new Model(process.env.DBNAME+'.'+iStudio10[i].table_name)
+
+            let dataArr = await rpoIStudio10.getSQL(iStudio10[i].table_name)
+            await dataArr.forEach(async el => {
+                await defaultModel.put(el)
+            });
+
+            return;
+        }
+
+
+
+    }
+
+    // console.log("tables",iStudio10);
     
 
 }

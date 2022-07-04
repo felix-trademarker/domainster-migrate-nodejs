@@ -12,10 +12,17 @@ let conn = require('./config/DbConnect');
 conn.connectToServer( function( err, client ) { // MAIN MONGO START
     console.log("connecting to server....");
 
-    // migrationService.contents();
     
-    cron.schedule('*/20 * * * * *', () => {
-      migrationService.contents();
+    
+    // cron.schedule('*/20 * * * * *', () => {
+    //   // THIS IS USED TO MIGRATE DOMAINSTER
+    //   migrationService.contents();
+    // });
+
+    cron.schedule('*/30 * * * * *', () => {
+      // THIS IS USED TO MIGRATE ISTUDIO DB RAW DATA
+      // GET ALL FROM DB TABLE AND IMPORT ALL
+      migrationService.istudio10();
     });
 
     if (err) console.log(err);
