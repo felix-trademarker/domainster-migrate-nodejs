@@ -87,7 +87,19 @@ exports.istudio10 = async function() {
 
             let dataArr = await rpoIStudio10.getSQL(iStudio10[i].table_name)
             dataArr.forEach(async el => {
-                await defaultModel.put(el)
+
+                if (el && el.id) {
+                    let dup = defaultModel.findQuery({id : el.id})
+
+                    if (!(dup && dup.leng > 0)) {
+                        await defaultModel.put(el)
+                    }
+                    
+                } else {
+                    // ID IS NOT PRESENT
+                    await defaultModel.put(el)
+                }
+
             });
 
             return;
