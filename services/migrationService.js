@@ -67,20 +67,20 @@ exports.istudio10 = async function() {
 
         let lastMigrated = await rpoMigrations.getLastMigrate(iStudio10[i].table_name)
 
-        let migrationData = {
-            obj : iStudio10[i].table_name,
-            page: 1,
-            limit: -1,
-            flag: true,
-            created_at : moment().format()
-        }
-
-        await rpoMigrations.put(migrationData)
+        
 
         // console.log(lastMigrated)
         if (!lastMigrated || lastMigrated.length <= 0) {
 
-            
+            let migrationData = {
+                obj : iStudio10[i].table_name,
+                page: 1,
+                limit: -1,
+                flag: true,
+                created_at : moment().format()
+            }
+    
+            await rpoMigrations.put(migrationData)
 
             console.log("this", iStudio10[i].table_name)
             let defaultModel = new Model(process.env.DBNAME+'.'+iStudio10[i].table_name)
