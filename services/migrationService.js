@@ -107,7 +107,7 @@ exports.istudio10 = async function() {
           || iStudio10[i].table_name == "announcement" 
           || iStudio10[i].table_name == "applicant" 
         ) {
-            console.log(" << SKIP %S >>", iStudio10[i].table_name);
+            console.log(" << SKIP "+iStudio10[i].table_name+" >>");
             // return;
         } else {
             // blast migration, call only once
@@ -117,10 +117,10 @@ exports.istudio10 = async function() {
             let dataArr = await rpoIStudio10.getSQL(iStudio10[i].table_name)
             console.log("Total fetched records", dataArr.length)
 
-            let count = 1;
-            dataArr.forEach(async el => {
+            // let count = 1;
+            dataArr.forEach(async (el,n) => {
                 await defaultModel.put(el)
-                console.log("added ",count++);
+                console.log(iStudio10[i].table_name,">> Added ",n +' of '+dataArr.length);
             });
         }
 
