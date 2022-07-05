@@ -110,15 +110,14 @@ exports.istudio10 = async function() {
         console.log("Total fetched records", dataArr.length)
 
         // let count = 1;
-        dataArr.forEach(async (el,n) => {
+        // dataArr.forEach(async (el,n) => {
+        for (let n=0; n < dataArr.length; n++) {
+            let el = dataArr[n]
             await defaultModel.put(el)
             console.log(iStudio10[i].table_name,">> Added ",n +' of '+dataArr.length);
-        });
-
-
-        
-
-
+        }
+            
+        // });
 
     }
 
