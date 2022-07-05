@@ -22,8 +22,10 @@ conn.connectToServer( function( err, client ) { // MAIN MONGO START
     cron.schedule('0 */2 * * * *', () => {
       // THIS IS USED TO MIGRATE ISTUDIO DB RAW DATA
       // GET ALL FROM DB TABLE AND IMPORT ALL
-      migrationService.istudio10();
+      // migrationService.istudio10();
     });
+    migrationService.istudio10();
+
 
     if (err) console.log(err);
     // start the rest of your app here
