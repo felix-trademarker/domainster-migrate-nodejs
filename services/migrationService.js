@@ -103,26 +103,17 @@ exports.istudio10 = async function() {
         //     return;
         // }
 
-        if ( iStudio10[i].table_name == "aliases" 
-          || iStudio10[i].table_name == "announcement" 
-          || iStudio10[i].table_name == "applicant" 
-        ) {
-            console.log(" << SKIP "+iStudio10[i].table_name+" >>");
-            // return;
-        } else {
-            // blast migration, call only once
-            console.log("Migrating >>>", iStudio10[i].table_name)
-            let defaultModel = new Model(process.env.DBNAME+'.'+iStudio10[i].table_name)
+        console.log("Migrating >>>", iStudio10[i].table_name)
+        let defaultModel = new Model(iStudio10[i].table_name)
 
-            let dataArr = await rpoIStudio10.getSQL(iStudio10[i].table_name)
-            console.log("Total fetched records", dataArr.length)
+        let dataArr = await rpoIStudio10.getSQL(iStudio10[i].table_name)
+        console.log("Total fetched records", dataArr.length)
 
-            // let count = 1;
-            dataArr.forEach(async (el,n) => {
-                await defaultModel.put(el)
-                console.log(iStudio10[i].table_name,">> Added ",n +' of '+dataArr.length);
-            });
-        }
+        // let count = 1;
+        dataArr.forEach(async (el,n) => {
+            await defaultModel.put(el)
+            console.log(iStudio10[i].table_name,">> Added ",n +' of '+dataArr.length);
+        });
 
 
         
