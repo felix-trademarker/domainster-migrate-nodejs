@@ -65,45 +65,65 @@ exports.istudio10 = async function() {
 
     for (let i=0; i < iStudio10.length; i++) {
 
-        let lastMigrated = await rpoMigrations.getLastMigrate(iStudio10[i].table_name)
-
-        
+        // let lastMigrated = await rpoMigrations.getLastMigrate(iStudio10[i].table_name)
 
         // console.log(lastMigrated)
-        if (!lastMigrated || lastMigrated.length <= 0) {
+        // if (!lastMigrated || lastMigrated.length <= 0) {
 
-            let migrationData = {
-                obj : iStudio10[i].table_name,
-                page: 1,
-                limit: -1,
-                flag: true,
-                created_at : moment().format()
-            }
+        //     let migrationData = {
+        //         obj : iStudio10[i].table_name,
+        //         page: 1,
+        //         limit: -1,
+        //         flag: true,
+        //         created_at : moment().format()
+        //     }
     
-            await rpoMigrations.put(migrationData)
+        //     await rpoMigrations.put(migrationData)
 
-            console.log("this", iStudio10[i].table_name)
-            let defaultModel = new Model(process.env.DBNAME+'.'+iStudio10[i].table_name)
+        //     console.log("this", iStudio10[i].table_name)
+        //     let defaultModel = new Model(process.env.DBNAME+'.'+iStudio10[i].table_name)
 
-            let dataArr = await rpoIStudio10.getSQL(iStudio10[i].table_name)
-            dataArr.forEach(async el => {
+        //     let dataArr = await rpoIStudio10.getSQL(iStudio10[i].table_name)
+        //     dataArr.forEach(async el => {
 
-                if (el && el.id) {
-                    let dup = defaultModel.findQuery({id : el.id})
+        //         if (el && el.id) {
+        //             let dup = defaultModel.findQuery({id : el.id})
 
-                    if (!(dup && dup.leng > 0)) {
-                        await defaultModel.put(el)
-                    }
-                    
-                } else {
-                    // ID IS NOT PRESENT
-                    await defaultModel.put(el)
-                }
+        //             if (!(dup && dup.leng > 0)) {
+        //                 await defaultModel.put(el)
+        //             }
 
-            });
+        //         } else {
+        //             // ID IS NOT PRESENT
+        //             await defaultModel.put(el)
+        //         }
 
+        //     });
+
+        //     return;
+        // }
+
+        if ( iStudio10[i].table_name == "aliases" 
+          || iStudio10[i].table_name == "announcement" 
+          || iStudio10[i].table_name == "applicant" 
+        ) {
+            console.log(" << SKIP %S >>", iStudio10[i].table_name);
             return;
         }
+
+
+        // blast migration, call only once
+        console.log("Migrating >>>", iStudio10[i].table_name)
+        let defaultModel = new Model(process.env.DBNAME+'.'+iStudio10[i].table_name)
+
+        let dataArr = await rpoIStudio10.getSQL(iStudio10[i].table_name)
+        console.log("Total fetched records", dataArr.length)
+
+        let count = 1;
+        dataArr.forEach(async el => {
+            await defaultModel.put(el)
+            console.log("added ",count++);
+        });
 
 
 
