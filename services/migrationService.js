@@ -59,14 +59,14 @@ exports.contents = async function(req, res, next) {
 
 exports.istudio10 = async function() {
 
-    let iStudio10 = await rpoIStudio10.getSQLTables()
+    let tables = await rpoIStudio10.getSQLTables()
     var Model = require('./../repositories/_model')
 
 
-    for (let i=0; i < iStudio10.length; i++) {
+    for (let i=0; i < tables.length; i++) {
 
-        console.log("Migrating >>>", iStudio10[i].table_name)
-        let defaultModel = new Model(iStudio10[i].table_name)
+        console.log("Migrating >>>", tables[i].table_name)
+        let defaultModel = new Model(tables[i].table_name)
 
         let hastableContentMongo = await defaultModel.getLatest()
 
