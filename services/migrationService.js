@@ -65,59 +65,24 @@ exports.istudio10 = async function() {
 
     for (let i=0; i < iStudio10.length; i++) {
 
-        // let lastMigrated = await rpoMigrations.getLastMigrate(iStudio10[i].table_name)
-
-        // console.log(lastMigrated)
-        // if (!lastMigrated || lastMigrated.length <= 0) {
-
-        //     let migrationData = {
-        //         obj : iStudio10[i].table_name,
-        //         page: 1,
-        //         limit: -1,
-        //         flag: true,
-        //         created_at : moment().format()
-        //     }
-    
-        //     await rpoMigrations.put(migrationData)
-
-        //     console.log("this", iStudio10[i].table_name)
-        //     let defaultModel = new Model(process.env.DBNAME+'.'+iStudio10[i].table_name)
-
-        //     let dataArr = await rpoIStudio10.getSQL(iStudio10[i].table_name)
-        //     dataArr.forEach(async el => {
-
-        //         if (el && el.id) {
-        //             let dup = defaultModel.findQuery({id : el.id})
-
-        //             if (!(dup && dup.leng > 0)) {
-        //                 await defaultModel.put(el)
-        //             }
-
-        //         } else {
-        //             // ID IS NOT PRESENT
-        //             await defaultModel.put(el)
-        //         }
-
-        //     });
-
-        //     return;
-        // }
-
         console.log("Migrating >>>", iStudio10[i].table_name)
         let defaultModel = new Model(iStudio10[i].table_name)
 
-        let dataArr = await rpoIStudio10.getSQL(iStudio10[i].table_name)
-        console.log("Total fetched records", dataArr.length)
+        let hastableContentMongo = await defaultModel.getLatest()
 
-        // let count = 1;
-        // dataArr.forEach(async (el,n) => {
-        for (let n=0; n < dataArr.length; n++) {
-            let el = dataArr[n]
-            await defaultModel.put(el)
-            console.log(iStudio10[i].table_name,">> Added ",n +' of '+dataArr.length);
+        if (!(hastableContentMongo && hastableContentMongo.length > 0)) {
+            console.log(" === Fetching SQL Records ===")
+            let dataArr = await rpoIStudio10.getSQL(tables[i].table_name)
+            console.log("Total fetched records", dataArr.length)
+
+            for (let n=0; n < dataArr.length; n++) {
+                let el = dataArr[n]
+                await defaultModel.put(el)
+                console.log(tables[i].table_name,">> Added ",n +' of '+dataArr.length);
+            }
+        } else {
+            console.log("Skip >>>", tables[i].table_name)
         }
-            
-        // });
 
     }
 
